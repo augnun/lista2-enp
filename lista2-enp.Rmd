@@ -43,3 +43,14 @@ binom.test(8, 10, 0.5, alternative = "greater")
   $$ B^{*} = \frac{B - E_{p0} (B)}{{var_{p0}(B)}^{\frac{1}{2}}}$$
 
   Em particular, $B^{*} = \frac{8 - 10\frac{1}{2}}{(10\frac{1}{2}\frac{1}{2})^{\frac{1}{2}}} = 1.89737$. Como $1.89737 > 1.644854$, rejeitamos $H_0$ também usando a aproximação para grandes amostras. Porém, note que o _ajuste_ do resultado aproximado é um pouco folgado, a hipótese nula foi rejeitada com uma margem bem maior que no Teste Binomial, possivelmente em razão da amostra $n = 10$ não poder ser considerada _grande_ o suficiente para assegurar a normalização.
+  
+#Questão 9 
+_Forsman and Lindell (1993) studied swallowing performance of adders (snakes). Captive snakes were fed with dead field voles (rodents) of differing body masses and the number of successful swallowing attempts was recorded. Out of 67 runs resulting in swallowing attempts, 58 where successful and 9 failed. (A failure was easy to detect because the fur of a partly swallowed and regurgitated vole is slick and sticks to the anterior part of the body.) Test the hypothesis that p = .6 against the alternative p > .6._
+
+```{r}
+binom.test(58, 67, 0.6, alternative = "greater")
+```
+
+Como o p-valor é muito próximo de 0, rejeitamos $H_0$ com nível de significância alto.
+
+#Questão 10
