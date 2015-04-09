@@ -1,0 +1,45 @@
+---
+title: "Lista 2 - Estatística Não-Paramétrica - 1/2015"
+author: "Augusto Cesar Ribeiro Nunes - 13/0103004"
+date: "April 8, 2015"
+output: html_document
+---
+#Introdução
+  Este trabalho refere-se à segunda lista de exercícios da disciplina Métodos Estatísticos 2 (Estatística Não-Paramétrica), ministrada pelo Prof. Dr. Raul Matsushita, oferecida pelo Departamento de Estatística da Universidade de Brasília em nível de graduação no 1o semestre de 2015. Encontra-se disponível em versão eletrônica nos seguintes repositórios:
+  * github:
+  * bitbucket:
+  * rpubs:
+  
+#Questão 4 
+_Suppose that 10 Bernoulli trials satisfying Assumptions A1–A3 result in 8 successes. Investigate the accuracy of the large-sample approximation by comparing the smallest significance level at which we would reject_ $H_0 : p = \frac{1}{2}$ _in favor of_ $p > \frac{1}{2}$ _when using procedure (2.3) with the corresponding smallest significance level for the large-sample approximation to procedure (2.3) given by (2.10)._
+
+As suposições são as seguintes:
+
+* A1: O resultado de cada experimento pode ser classificado como sucesso ou fracasso
+* A2: A probabilidade de sucesso, denominada _p_, permanece constante em todas as realizações do experimento
+* A3: Os _n_ experimentos são independentes.
+
+##Teste Binomial 
+  A versão unilateral à direita do teste binomial tem as hipóteses $H_0 : p = \frac{1}{2}$ e $H_1 : p > \frac{1}{2}$, e tem como estatística de teste B = número de sucessos. Com um nível de significância $\alpha$, rejeitamos $H_0$ se $B \geq b_{\alpha}$; caso contrário não rejeitamos.
+
+  O tamanho amostral é $n = 10$, temos $B = 8$ sucessos, então, utilizando a função `pbinom`:
+```{r, echo=F}
+pbinom(q=0:10, size = 10, prob = 0.5, lower.tail = F)
+```
+  Este é o vetor de probabilidades de $P_{0.5}(B > x)$, que podem ser usados para definir um nível de significância $\alpha$. Possíveis candidatos para $\alpha$ são 
+  * Com x = 7, $\alpha = 0.0546875000$ 
+  * Com x = 8, $\alpha = 0.0107421875$ 
+  * Com x = 9, $\alpha = 0.0009765625$ 
+  * Com x = 10, $\alpha = 0.0000000000$ 
+  
+  Note que $P(B > x) =P(B \geq x+1)$, e portanto $b_{0.0546875} = 8$, $b_{0.0107421875} = 9$ e $b_{0.0009765625} = 10$. Portanto, com um certo grau de flexibilidade, poderíamos rejeitar $H_0$ pois $B = 8$ com $\alpha = 0.0546875$. 
+  
+  Outra forma de chegar ao mesmo resultado, de maneira mais direta, é usando a função `binom.test` do R, em particular com os parâmetros `binom.test(8, 10, 0.5, alternative = "greater")`.
+```{r, echo=F, tidy=TRUE}
+binom.test(8, 10, 0.5, alternative = "greater")
+```  
+##Aproximação para grandes amostras
+  Considerando $\alpha = .05$, temos $z_{.05} = 1.644854$ obtido por `qnorm(.95, 0, 1)`. A versão padronizada da estatística B sob $H_0$ é dada por 
+  $$ B^{*} = \frac{B - E_{p0} (B)}{{var_{p0}(B)}^{\frac{1}{2}}}$$
+
+  Em particular, $B^{*} = \frac{8 - 10\frac{1}{2}}{(10\frac{1}{2}\frac{1}{2})^{\frac{1}{2}}} = 1.89737$. Como $1.89737 > 1.644854$, rejeitamos $H_0$ também usando a aproximação para grandes amostras. Porém, note que o _ajuste_ do resultado aproximado é um pouco folgado, a hipótese nula foi rejeitada com uma margem bem maior que no Teste Binomial, possivelmente em razão da amostra $n = 10$ não poder ser considerada _grande_ o suficiente para assegurar a normalização.
