@@ -2,12 +2,12 @@
 title: "Lista 2 - Estatística Não-Paramétrica - 1/2015"
 author: "Augusto Cesar Ribeiro Nunes - 13/0103004"
 date: "April 8, 2015"
-output: html_document
+output: pdf_document
 ---
 #Introdução
   Este trabalho refere-se à segunda lista de exercícios da disciplina Métodos Estatísticos 2 (Estatística Não-Paramétrica), ministrada pelo Prof. Dr. Raul Matsushita, oferecida pelo Departamento de Estatística da Universidade de Brasília em nível de graduação no 1o semestre de 2015. Encontra-se disponível em versão eletrônica nos seguintes repositórios:
-  * github:
-  * bitbucket:
+  * github: https://github.com/august-o/lista2-enp
+  * bitbucket: 
   * rpubs:
   
 #Questão 4 
@@ -23,7 +23,7 @@ As suposições são as seguintes:
   A versão unilateral à direita do teste binomial tem as hipóteses $H_0 : p = \frac{1}{2}$ e $H_1 : p > \frac{1}{2}$, e tem como estatística de teste B = número de sucessos. Com um nível de significância $\alpha$, rejeitamos $H_0$ se $B \geq b_{\alpha}$; caso contrário não rejeitamos.
 
   O tamanho amostral é $n = 10$, temos $B = 8$ sucessos, então, utilizando a função `pbinom`:
-```{r, echo=F}
+```{r pbinom_q4, echo=F}
 pbinom(q=0:10, size = 10, prob = 0.5, lower.tail = F)
 ```
   Este é o vetor de probabilidades de $P_{0.5}(B > x)$, que podem ser usados para definir um nível de significância $\alpha$. Possíveis candidatos para $\alpha$ são 
@@ -35,7 +35,7 @@ pbinom(q=0:10, size = 10, prob = 0.5, lower.tail = F)
   Note que $P(B > x) =P(B \geq x+1)$, e portanto $b_{0.0546875} = 8$, $b_{0.0107421875} = 9$ e $b_{0.0009765625} = 10$. Portanto, com um certo grau de flexibilidade, poderíamos rejeitar $H_0$ pois $B = 8$ com $\alpha = 0.0546875$. 
   
   Outra forma de chegar ao mesmo resultado, de maneira mais direta, é usando a função `binom.test` do R, em particular com os parâmetros `binom.test(8, 10, 0.5, alternative = "greater")`.
-```{r, echo=F, tidy=TRUE}
+```{r, teste_q4, echo=F, tidy=TRUE}
 binom.test(8, 10, 0.5, alternative = "greater")
 ```  
 ##Aproximação para grandes amostras
@@ -47,10 +47,52 @@ binom.test(8, 10, 0.5, alternative = "greater")
 #Questão 9 
 _Forsman and Lindell (1993) studied swallowing performance of adders (snakes). Captive snakes were fed with dead field voles (rodents) of differing body masses and the number of successful swallowing attempts was recorded. Out of 67 runs resulting in swallowing attempts, 58 where successful and 9 failed. (A failure was easy to detect because the fur of a partly swallowed and regurgitated vole is slick and sticks to the anterior part of the body.) Test the hypothesis that p = .6 against the alternative p > .6._
 
-```{r}
+Utilizaremos o Teste Binomial (e sua implementação no R) diretamente para esta questão, já que ele já foi estudado em mais detalhes na anterior. Portanto: 
+
+```{r teste_q9}
 binom.test(58, 67, 0.6, alternative = "greater")
 ```
 
 Como o p-valor é muito próximo de 0, rejeitamos $H_0$ com nível de significância alto.
 
 #Questão 10
+
+_Table 2.1 gives numbers of deaths in US airline accidents from 2000 to 2010. (The entry for 2001 does not include the death toll in the September 11, 2001 plane hijackings.) See the TODAY article by Levin (2011), which cites data from the National Transportation Board._ 
+_Suppose you view each trial year as a success if there are no U.S. Airline deaths and a failure otherwise. Discuss the validity of Assumptions A1 and A2._
+
+__Tabela 1__ Número de mortes em acidentes aéreos nos EUA, por ano
+
+2000 | 2001 | 2002 | 2003 | 2004 | 2005 | 2006 | 2007 | 2008 | 2009 | 2010
+-----|------|------|------|------|------|------|------|------|------|-----
+89   | 266  | 0    | 22   | 13   | 22   | 50   | 0    | 0    | 50   | 0
+
+  
+  Como supõe-se sucesso quando o respectivo ano não apresenta mortes em acidentes aéreos nos EUA, a Tabela acima pode ser vista da seguinte maneira:
+
+__Tabela 2__ Construção de variável dicotômica que indica a ocorrência ou não de mortes em acidentes aéreos nos EUA
+
+2000 | 2001 | 2002 | 2003 | 2004 | 2005 | 2006 | 2007 | 2008 | 2009 | 2010
+-----|------|------|------|------|------|------|------|------|------|-----
+0    | 0    | 1    | 0    | 0    | 0    | 0    | 1    | 1    |0     | 1
+
+  As suposições A1 e A2 são as seguintes: 
+  
+* A1: O resultado de cada experimento pode ser classificado como sucesso ou fracasso
+* A2: A probabilidade de sucesso, denominada _p_, permanece constante em todas as realizações do experimento
+
+  Ora, a suposição A1 neste contexto é razoável no sentido de mensurar a ocorrência ou não de mortes em acidentes aéreos no dado período, mesmo que se perca a medida de dimensionalidade - e.g no ano de 2004 tivemos 13 morte em acidentes aéreos, em 2001, 266. 
+  Já em relação à suposição A2, considero temerário supor a constância da probabilidade de não-ocorrência de acidentes aéreos (a probabilidade de sucesso _p_), pois temos algumas variáveis confundidoras que não são consideradas. Cito duas para o exemplo em particular:
+
+1. __Não há qualquer variável que controle em relação ao quantitativo da frota aeroviária do país__: é razoável admitir que possa haver correlação entre o número de aviões registrados no país e o número de mortes ocorridas em acidentes aéreos. As estimativas deste contingente são apresentadas na tabela a seguir:
+
+__Tabela 3__ Estimativa de aeronaves registradas nos EUA, por ano (em milhares)
+
+2000 | 2001 | 2002 | 2003 | 2004 | 2005 | 2006 | 2007 | 2008 | 2009 | 2010
+-----|------|------|------|------|------|------|------|------|------|-----
+217  | 211  | 211  | 209  | 219  | 224  | 226  | 221  | 228  | 224  | 224
+
+Adaptada de http://www.aopa.org/About-AOPA/General-Aviation-Statistics/Active-General-Aviation-Aircraft-in-the-U-S
+
+2. __Não há tratamento quanto aos avanços tecnológicos__: sabe-se que indústria de aviação investe muito em tecnologias de materiais, navegação, sinalização, controle aéreo etc. Não há porque supor que a probabilidade de um avião cair, se chocar contra algo, ou qualquer outro evento catastrófico seja a mesma de 2000 a 2010.
+
+Dito isso, considero que um teste que avalie a tendência da distribuição seja mais adequado para este caso.
