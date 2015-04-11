@@ -62,10 +62,10 @@ _Suppose you view each trial year as a success if there are no U.S. Airline deat
 
 __Tabela 1__ Número de mortes em acidentes aéreos nos EUA, por ano
 
+<<<<<<< HEAD
 2000  | 2001  | 2002  | 2003  | 2004  | 2005  | 2006  | 2007  | 2008  | 2009  | 2010 |
 -----:|------:|------:|------:|------:|------:|------:|------:|------:|------:|-----:|
 89    | 266   | 0     | 22    | 13    | 22    | 50    | 0     | 0     | 50    | 0    |
-
   
   Como supõe-se sucesso quando o respectivo ano não apresenta mortes em acidentes aéreos nos EUA, a Tabela acima pode ser vista da seguinte maneira:
 
