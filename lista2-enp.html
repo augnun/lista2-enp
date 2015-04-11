@@ -108,6 +108,142 @@ img {
 <p>Em particular, <span class="math">\(B^{*} = \frac{8 - 10\frac{1}{2}}{(10\frac{1}{2}\frac{1}{2})^{\frac{1}{2}}} = 1.89737\)</span>. Como <span class="math">\(1.89737 &gt; 1.644854\)</span>, rejeitamos <span class="math">\(H_0\)</span> também usando a aproximação para grandes amostras. Porém, note que o <em>ajuste</em> do resultado aproximado é um pouco folgado, a hipótese nula foi rejeitada com uma margem bem maior que no Teste Binomial, possivelmente em razão da amostra <span class="math">\(n = 10\)</span> não poder ser considerada <em>grande</em> o suficiente para assegurar a normalização.</p>
 </div>
 </div>
+<div id="questao-9" class="section level1">
+<h1>Questão 9</h1>
+<p><em>Forsman and Lindell (1993) studied swallowing performance of adders (snakes). Captive snakes were fed with dead field voles (rodents) of differing body masses and the number of successful swallowing attempts was recorded. Out of 67 runs resulting in swallowing attempts, 58 where successful and 9 failed. (A failure was easy to detect because the fur of a partly swallowed and regurgitated vole is slick and sticks to the anterior part of the body.) Test the hypothesis that p = .6 against the alternative p &gt; .6.</em></p>
+<pre class="r"><code>binom.test(58, 67, 0.6, alternative = &quot;greater&quot;)</code></pre>
+<pre><code>## 
+##  Exact binomial test
+## 
+## data:  58 and 67
+## number of successes = 58, number of trials = 67, p-value =
+## 1.953e-06
+## alternative hypothesis: true probability of success is greater than 0.6
+## 95 percent confidence interval:
+##  0.7772988 1.0000000
+## sample estimates:
+## probability of success 
+##              0.8656716</code></pre>
+<p>Como o p-valor é muito próximo de 0, rejeitamos <span class="math">\(H_0\)</span> com nível de significância alto.</p>
+</div>
+<div id="questao-10" class="section level1">
+<h1>Questão 10</h1>
+<p><em>Table 2.1 gives numbers of deaths in US airline accidents from 2000 to 2010. (The entry for 2001 does not include the death toll in the September 11, 2001 plane hijackings.) See the TODAY article by Levin (2011), which cites data from the National Transportation Board.</em> <em>Suppose you view each trial year as a success if there are no U.S. Airline deaths and a failure otherwise. Discuss the validity of Assumptions A1 and A2.</em></p>
+<p><strong>Tabela 1</strong> Número de mortes em acidentes aéreos nos EUA, por ano</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">2000</th>
+<th align="left">2001</th>
+<th align="left">2002</th>
+<th align="left">2003</th>
+<th align="left">2004</th>
+<th align="left">2005</th>
+<th align="left">2006</th>
+<th align="left">2007</th>
+<th align="left">2008</th>
+<th align="left">2009</th>
+<th align="left">2010</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">89</td>
+<td align="left">266</td>
+<td align="left">0</td>
+<td align="left">22</td>
+<td align="left">13</td>
+<td align="left">22</td>
+<td align="left">50</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">50</td>
+<td align="left">0</td>
+</tr>
+</tbody>
+</table>
+<p>Como supõe-se sucesso quando o respectivo ano não apresenta mortes em acidentes aéreos nos EUA, a Tabela acima pode ser vista da seguinte maneira:</p>
+<p><strong>Tabela 2</strong> Construção de variável dicotômica que indica a ocorrência ou não de mortes em acidentes aéreos nos EUA</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">2000</th>
+<th align="left">2001</th>
+<th align="left">2002</th>
+<th align="left">2003</th>
+<th align="left">2004</th>
+<th align="left">2005</th>
+<th align="left">2006</th>
+<th align="left">2007</th>
+<th align="left">2008</th>
+<th align="left">2009</th>
+<th align="left">2010</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">1</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">1</td>
+<td align="left">1</td>
+<td align="left">0</td>
+<td align="left">1</td>
+</tr>
+</tbody>
+</table>
+<p>As suposições A1 e A2 são as seguintes:</p>
+<ul>
+<li>A1: O resultado de cada experimento pode ser classificado como sucesso ou fracasso</li>
+<li>A2: A probabilidade de sucesso, denominada <em>p</em>, permanece constante em todas as realizações do experimento</li>
+</ul>
+<p>Ora, a suposição A1 neste contexto é razoável no sentido de mensurar a ocorrência ou não de mortes em acidentes aéreos no dado período, mesmo que se perca a medida de dimensionalidade - e.g no ano de 2004 tivemos 13 morte em acidentes aéreos, em 2001, 266. Já em relação à suposição A2, considero temerário supor a constância da probabilidade de não-ocorrência de acidentes aéreos (a probabilidade de sucesso <em>p</em>), pois temos algumas variáveis confundidoras que não são consideradas. Cito duas para o exemplo em particular:</p>
+<ol style="list-style-type: decimal">
+<li><strong>Não há qualquer variável que controle em relação ao quantitativo da frota aeroviária do país</strong>: é razoável admitir que possa haver correlação entre o número de aviões registrados no país e o número de mortes ocorridas em acidentes aéreos. As estimativas deste contingente são apresentadas na tabela a seguir:</li>
+</ol>
+<p><strong>Tabela 3</strong> Estimativa de aeronaves registradas nos EUA, por ano (em milhares)</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">2000</th>
+<th align="left">2001</th>
+<th align="left">2002</th>
+<th align="left">2003</th>
+<th align="left">2004</th>
+<th align="left">2005</th>
+<th align="left">2006</th>
+<th align="left">2007</th>
+<th align="left">2008</th>
+<th align="left">2009</th>
+<th align="left">2010</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">217</td>
+<td align="left">211</td>
+<td align="left">211</td>
+<td align="left">209</td>
+<td align="left">219</td>
+<td align="left">224</td>
+<td align="left">226</td>
+<td align="left">221</td>
+<td align="left">228</td>
+<td align="left">224</td>
+<td align="left">224</td>
+</tr>
+</tbody>
+</table>
+<p>Adaptada de <a href="http://www.aopa.org/About-AOPA/General-Aviation-Statistics/Active-General-Aviation-Aircraft-in-the-U-S" class="uri">http://www.aopa.org/About-AOPA/General-Aviation-Statistics/Active-General-Aviation-Aircraft-in-the-U-S</a></p>
+<ol start="2" style="list-style-type: decimal">
+<li><strong>Não há tratamento quanto aos avanços tecnológicos</strong>: sabe-se que indústria de aviação investe muito em tecnologias de materiais, navegação, sinalização, controle aéreo etc. Não há porque supor que a probabilidade de um avião cair, se chocar contra algo, ou qualquer outro evento catastrófico seja a mesma de 2000 a 2010.</li>
+</ol>
+<p>Dito isso, considero que um teste que avalie a tendência da distribuição seja mais adequado para este caso.</p>
+</div>
 
 
 </div>
